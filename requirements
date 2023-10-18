@@ -1,0 +1,10 @@
+Flask
+pydub
+pyaudio
+wave
+socket
+pickle
+os
+threading
+time
+pydub

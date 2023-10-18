@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Recorder and Uploader</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+<style>
+          .container.mt-5 {
+      margin-top: 80px; /* Ajustez la valeur de la marge supérieure selon vos besoins */
+
+
+    }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    .text-center {
+      text-align: center; /* Centrer le texte */
+      font-size: 30px; /* Taille de la police */
+      color: #333; /* Couleur du texte */
+      margin-bottom: 20px; /* Espacement en bas */
+    }
+
+        #recordButton {
+            background-color: blue; /* Couleur de fond bleue */
+            border: none; /* Suppression de la bordure */
+            border-radius: 50%; /* Forme ronde */
+            width: 80px; /* Largeur */
+            height: 80px; /* Hauteur */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+              margin-top: 90px; /* Espacement en haut */
+              margin-left: 110px; /* Espacement à gauche */
+              margin-right: 20px; /* Espacement à droite */
+                margin-bottom: 25px; /* Espacement en bas */
+
+
+        }
+
+        #recordIcon {
+            color: white; /* Couleur de l'icône en blanc */
+            font-size: 25px; /* Augmentation de la taille de l'icône */
+              /* Style au survol */
+             transition: color 0.3s; /* Transition de couleur en 0.3 secondes */
+
+
+        }
+                #recordIcon:hover {
+          color: black; /* Couleur de l'icône en bleu au survol */
+        }
+
+
+               .container {
+          width :400px;
+
+          background-color: #f0f0f0; /* Couleur d'arrière-plan */
+          padding: 5px; /* Espace intérieur */
+          border: 1px solid #ccc; /* Bordure */
+          border-radius: 5px; /* Coins arrondis */
+          text-align: center; /* Alignement du texte au centre */
+          box-shadow: 0 0 100px rgba(0, 0, 0, 0.1); /* Ombre légère */
+
+        }
+
+        #status {
+          font-size: 20px; /* Taille de la police */
+          color: #333; /* Couleur du texte */
+        }
+                #uploadButton {
+          background-color: blue; /* Couleur de fond bleue (couleur primaire) */
+          color: #fff; /* Couleur du texte en blanc */
+          border: none; /* Suppression de la bordure */
+          border-radius: 5px; /* Coins arrondis */
+          padding: 15px 20px; /* Espace intérieur (haut/bas, gauche/droite) */
+          cursor: pointer;
+          font-size: 20px; /* Taille de la police */
+          transition: background-color 0.3s; /* Transition pour un effet de survol */
+           margin-top: 90px; /* Espacement en haut */
+
+        }
+
+        #uploadButton:hover {
+          background-color: #0056b3; /* Couleur de fond bleue légèrement plus foncée au survol */
+        }
+
+
+
+        div {
+          margin-top: 20px;
+           margin-left : 40px;
+           margin-right: 40px;
+
+
+           /* Vous pouvez ajuster la valeur de la marge selon vos besoins */
+        }
+    #receivedText {
+        text-align: center; /* Centrer le texte horizontalement */
+        font-size: 16px; /* Réduire la taille du texte (ajustez la valeur selon vos besoins) */
+        border: 1px solid #000; /* Ajouter une bordure autour du texte */
+        padding: 10px; /* Ajouter un espace intérieur pour aérer le contenu */
+    }
+     #received {
+     width :200px;
+           margin-left : 100px;
+           margin-right: 250px;
+           text-align: center; /* Centrer le texte horizontalement */
+
+
+    }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Audio Recorder and Uploader</h1>
+
+        <div class="text-center">
+            <button id="recordButton" class="btn btn-primary" onclick="toggleRecording()">  <span id="recordIcon"><i class="fa-solid fa-microphone"></i></span></button>
+        </div>
+
+
+       <div   id="received" class="container">
+                <p id="status">Status: Not Recording</p>
+            </div>
+        <button id="uploadButton" class="btn btn-primary" onclick="uploadSelectedAudio()">Upload</button>
+        <div>
+          <input class="form-control form-control-lg" id="audioFileInput" type="file" style="display: none">
+        </div>
+        <div id="receivedText" class="text-center mt-3">{{ received_text }}</div>
+
+    </div>
+
+
+<script>
+function updateReceivedText() {
+    fetch('/get_received_text')
+        .then(response => response.json())
+        .then(data => {
+            // Mettre à jour le contenu de la div avec l'ID "receivedText"
+            const receivedTextDiv = document.getElementById('receivedText');
+            if (data!=",," && data.length > 0) {
+                receivedTextDiv.textContent = data;
+            } else {
+                receivedTextDiv.textContent = 'Loading.....';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+setInterval(updateReceivedText, 1000);  // Mettre à jour toutes les 1 seconde
+</script>
+    <script>
+
+        var recording = false;
+        function uploadSelectedAudio() {
+    var audioFileInput = document.getElementById('audioFileInput');
+    var selectedFile = audioFileInput.files[0];
+    if (selectedFile) {
+        // You can now upload the selected audio file to your server
+        uploadSelectedAudio(selectedFile);
+    }
+}
+
+document.getElementById('uploadButton').addEventListener('click', function() {
+  document.getElementById('audioFileInput').style.display = 'block';
+});
+        function toggleRecording() {
+            var recordButton = document.getElementById('recordButton');
+            var statusText = document.getElementById('status');
+
+            if (!recording) {
+                // Start recording
+                recordIcon.textContent  = '🔴';
+                statusText.textContent = 'Status: Recording...';
+
+                recording = true;
+                startRecording();
+            } else {
+                // Stop recording
+                recordIcon.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+
+               //  recordIcon.textContent  = '▶';
+                statusText.textContent = 'Status: Not Recording';
+
+                recording = false;
+                stopRecording();
+            }
+        }
+
+        function startRecording() {
+            // Make an AJAX POST request to your Flask server to start recording
+            fetch('/record', {
+                method: 'POST',
+                body: JSON.stringify({ action: 'start' }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function stopRecording() {
+            // Make an AJAX POST request to your Flask server to stop recording
+            fetch('/record', {
+                method: 'POST',
+                body: JSON.stringify({ action: 'stop' }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+
+
+        function uploadAudio() {
+            var audioFileInput = document.getElementById('audioFileInput');
+            audioFileInput.click();
+        }
+
+        // Add an event listener to handle the file selection
+        document.getElementById('audioFileInput').addEventListener('change', function (event) {
+            var selectedFile = event.target.files[0];
+            if (selectedFile) {
+                // You can now upload the selected audio file to your server
+                uploadSelectedAudio(selectedFile);
+            }
+        });
+
+       function uploadSelectedAudio(audioFile) {
+    // Create a FormData object to send the audio file
+    var formData = new FormData();
+    formData.append('audio', audioFile);
+
+    // Make an AJAX POST request to upload the audio file
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the server's response here
+        console.log(data);
+
+
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+        function showUploadForm() {
+            var uploadForm = document.getElementById('uploadForm');
+            uploadForm.style.display = 'block';
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
