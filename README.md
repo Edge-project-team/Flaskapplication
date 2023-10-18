@@ -22,7 +22,7 @@ Record an audio speech using the provided interface.
 The audio will be transcribed and the text will be displayed in the interface.
 
 
-![image](https://github.com/Edge-project-team/Flaskapplication/assets/106774025/025c58fb-6b78-44e6-9d48-9c9418faa7f9)
+# Demo
 
 
 ![image](https://github.com/Edge-project-team/Flaskapplication/assets/106774025/ab6e48bc-43ee-466d-8968-406e343cbd11)
