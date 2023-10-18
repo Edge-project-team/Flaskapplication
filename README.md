@@ -4,6 +4,11 @@ This Flask application allows users to record an audio speech through a web inte
 git clone <repository_url>
 Install the required dependencies using pip:
 pip install -r requirements.txt
+
+# Client code
+In the client-side code, three clients receive the audio speech data from the server. Each client processes this audio data to transcribe it into text and then sends the transcribed text back to the server.*
+# Server code 
+The server receives the audio input from the interface user. It then divides the audio into parts and distributes these parts to the connected clients. Each client processes its respective audio part and transcribes it into text. The server collects the results from each client and concatenates them to prepare the transcribed text, which will be displayed in the interface.
 # run the application 
 python server.py
 python client.py
