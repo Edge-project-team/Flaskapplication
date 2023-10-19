@@ -5,7 +5,8 @@ git clone <repository_url>
 # Install the required dependencies using pip:
 pip install -r requirements.txt
 # adress 
-change your correspanding host adress in server code (line 244 ) and in client code (line 7)  
+change your correspanding host adress in server code  and in client code    
+for testing monoServer you need to change your adress ip also
 # Client code
 In the client-side code, three clients receive the audio speech data from the server. Each client processes this audio data to transcribe it into text and then sends the transcribed text back to the server.*
 # Server code 
@@ -14,7 +15,7 @@ The server receives the audio input from the interface user. It then divides the
 python server.py
 # run client code
 python client.py
-# Open the application in a web browser.
+# Open the application in a web browser
 # usage 
 Ensure you provide an English audio sample in .wav format if the user intends to upload a file for processing.
 
