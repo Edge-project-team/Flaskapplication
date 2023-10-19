@@ -10,7 +10,7 @@ import time
 from pydub import AudioSegment
 
 
-received_text= 'Loading ...'
+received_text= 'No data ...'
 
 recording = False  # Initialize the recording flag
 audio_frames = []
@@ -78,8 +78,9 @@ def text_receive(client_socket):
                 print("Partie non reconnue :", partie)
 
             received_text = client_text[0]+"  " + client_text[1] + "  "+ client_text[2]
-            if(len(received_text)==2):
-                received_text="Could not understand"
+            print("len",len(received_text))
+            if(len(received_text) == 4):
+                received_text="Could not understand the audio"
         except Exception as e:
             print(f"Erreur lors de la réception du texte du client : {str(e)}")
             break
@@ -161,10 +162,10 @@ def run_main_logic():
 
 @app.route('/')
 def index():
-    return render_template('index.html',received_text=client_text)
+    return render_template('index.html',received_text=received_text)
 @app.route('/get_received_text')
 def get_received_text():
-    return jsonify(client_text)
+    return jsonify(received_text)
 @app.route('/upload', methods=['POST'])
 def upload_file():
     global nombre_enregistremet
@@ -240,4 +241,4 @@ def record_audio():
 
 
 if __name__ == '__main__':
-    app.run(host="adresse ip",port=8028)
+    app.run(host="10.25.12.209",port=8028)

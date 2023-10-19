@@ -43,11 +43,8 @@ def connect_text_to_server():
         return None
 
 def receive_audio(client_socket):
-    global identifiant
-    global partie
-    global  audio_file
-    global unique_filename
-
+    global identifiant;
+    global partie ;
     try:
         frames = client_socket.recv(4 * 1024)
         format, channels, rate = pickle.loads(frames)
@@ -64,10 +61,10 @@ def receive_audio(client_socket):
         print(partie)
 
         audio_data = audio_data[:-6]
-        if not os.path.exists('client'):
-            os.makedirs('client')
+        if not os.path.exists('client1'):
+            os.makedirs('client1')
         unique_filename=f'received_audio_part{identifiant}.wav'
-        audio_file = os.path.join('client', unique_filename)
+        audio_file = os.path.join('client1', unique_filename)
         with open(audio_file, 'wb') as received_audio_file:
             received_audio_file.write(audio_data)
 
@@ -82,6 +79,7 @@ def main():
      global connected_text
      global identifiant
      global partie
+     global audio_file
      while True:
          if not connected_once :  # Reconnectez le client uniquement si l'enregistrement est actif
              client_socket = connect_audio_to_server()
@@ -98,7 +96,7 @@ def main():
                     text_socket = connect_text_to_server()
                     if text_socket:
                         # Perform speech recognition on the received audio
-                        text_output = recognize_speech(f'client/received_audio_part{identifiant}.wav')
+                        text_output = recognize_speech(f'client1/received_audio_part{identifiant}.wav')
                         identifiant = identifiant + 1
                         if (text_output is None):
                              text_output =""
@@ -108,12 +106,9 @@ def main():
                         text_socket.send(text_send.encode())
                         connected_text = False
                         text_socket.close()
-                        print(f"{audio_file}")
-                        audio_files = os.path.join('client', unique_filename)
-                        # Supprimez le fichier
-                        os.remove(audio_files)
                         break
-
+                        # Supprimez le fichier
+                        os.remove(audio_file)
              connected_once= False
 
 

@@ -143,8 +143,6 @@ function updateReceivedText() {
             const receivedTextDiv = document.getElementById('receivedText');
             if (data!=",," && data.length > 0) {
                 receivedTextDiv.textContent = data;
-            } else {
-                receivedTextDiv.textContent = 'Loading.....';
             }
         })
         .catch(error => console.error('Error:', error));

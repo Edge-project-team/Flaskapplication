@@ -4,7 +4,8 @@ This Flask application allows users to record an audio speech through a web inte
 git clone <repository_url>
 # Install the required dependencies using pip:
 pip install -r requirements.txt
-
+# adress 
+change your correspanding adress 
 # Client code
 In the client-side code, three clients receive the audio speech data from the server. Each client processes this audio data to transcribe it into text and then sends the transcribed text back to the server.*
 # Server code 
@@ -29,3 +30,8 @@ The audio will be transcribed and the text will be displayed in the interface.
 
 
 ![image](https://github.com/Edge-project-team/Flaskapplication/assets/106774025/89c07232-8344-43b3-9e8b-948613595f94)
+
+# differance between mono version and distributed version 
+The mono version is quicker to develop, but it can face scalability issues and relies on a stable internet connection for efficient speech recognition. 
+
+On the other hand, the distributed version offers improved performance scalability and reduced wait times. However, it demands more time initially for development and deployment setup due to its complexity and coordination needs. It's important to note that the distributed version also requires a reliable internet connection, but it effectively addresses performance requirements.
