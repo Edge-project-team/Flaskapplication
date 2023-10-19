@@ -5,7 +5,7 @@ git clone <repository_url>
 # Install the required dependencies using pip:
 pip install -r requirements.txt
 # adress 
-change your correspanding adress 
+change your correspanding host adress in server code (line 244 ) and in client code (line 7)  
 # Client code
 In the client-side code, three clients receive the audio speech data from the server. Each client processes this audio data to transcribe it into text and then sends the transcribed text back to the server.*
 # Server code 
