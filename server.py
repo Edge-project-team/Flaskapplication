@@ -240,4 +240,4 @@ def record_audio():
 
 
 if __name__ == '__main__':
-    app.run(host="192.168.1.135",port=8028)
+    app.run(host="adresse ip",port=8028)
